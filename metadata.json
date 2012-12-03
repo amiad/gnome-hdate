@@ -1,1 +1,11 @@
-{"shell-version": ["3.6.2"], "uuid": "hdate@hatul.info", "name": "Gnome HDate", "description": "Show Hebrew Date in the Panel"}
+{
+  "shell-version": 
+  [
+    "3.2",
+    "3.4",
+    "3.6"
+  ],
+  "uuid": "hdate@hatul.info",
+  "name": "Gnome HDate", 
+  "description": "Show Hebrew Date in the Panel"
+}
