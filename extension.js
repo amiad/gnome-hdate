@@ -14,7 +14,7 @@ function init() {
                           track_hover: true });
     var h = Hdate.new();
     var d = new Date();
-    h.set_gdate(d.getDate()+1,d.getMonth()+1,d.getFullYear());
+    h.set_gdate(d.getDate(),d.getMonth()+1,d.getFullYear());
     let label = new St.Label({ text: h.get_format_date(0,0)});
 
     date.set_child(label);
