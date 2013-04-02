@@ -3,7 +3,9 @@
   [
     "3.2",
     "3.4",
-    "3.6"
+    "3.6",
+    "3.7",
+    "3.8"
   ],
   "uuid": "hdate@hatul.info",
   "name": "Gnome HDate", 
