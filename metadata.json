@@ -3,13 +3,11 @@
   [
     "3.2",
     "3.4",
-    "3.6",
-    "3.7",
-    "3.8"
+    "3.6"
   ],
   "uuid": "hdate@hatul.info",
   "name": "Gnome HDate", 
   "description": "Show Hebrew Date in the Panel",
   "url": "https://github.com/amiad/gnome-hdate",
-  "version": "4"  
+  "version": "3"  
 }
