@@ -9,5 +9,8 @@ Gnome-shell extension for show Hebrew date in the panel.
 ##Installation
 Rename the directory to `hdate@hatul.info` and move its to `~/.local/share/gnome-shell/extensions`.
 
+##Troubleshooting
+Arch users may need to rebuild the libhdate-glib every new version of Gnome.
+
 ##Thanks
 Kobi Zamir
