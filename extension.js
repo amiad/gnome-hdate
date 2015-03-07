@@ -12,6 +12,7 @@ const PopupMenu = imports.ui.popupMenu;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Config = imports.misc.config;
 const Gettext = imports.gettext;
+const Clutter = imports.gi.Clutter;
 
 const Hdate = imports.gi.LibHdateGlib.Hdate;
 
@@ -49,7 +50,7 @@ const HdateButton = new Lang.Class({
         this.parent(0.0, "Hdate Button", false);
         
         // make label 
-        this.buttonText = new St.Label();
+        this.buttonText = new St.Label({y_expand: true, y_align: Clutter.ActorAlign.CENTER});
         this.actor.add_actor(this.buttonText);
         
         // init the hebrew date object
