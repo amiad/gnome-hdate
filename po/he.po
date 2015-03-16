@@ -5,12 +5,13 @@
 # Amiad Bareli <amiad at hatul.info>, 2012.
 # Amiad Bareli <amiad at hatul.info>, 2015.
 # Amiad Bareli <amiad at hatul.info>, 2015.
+# Amiad Bareli <amiad at hatul.info>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-16 10:15+0200\n"
-"PO-Revision-Date: 2015-03-16 10:18+0300\n"
+"POT-Creation-Date: 2015-03-16 10:22+0200\n"
+"PO-Revision-Date: 2015-03-16 10:23+0300\n"
 "Last-Translator: Amiad Bareli <amiad at hatul.info>\n"
 "Language-Team: Hebrew\n"
 "Language: en\n"
@@ -24,25 +25,40 @@ msgstr ""
 "X-Poedit-SearchPath-0: /home/amiad/projects/gnome-hdate\n"
 
 #: /home/amiad/projects/gnome-hdate/extension.js:169
-msgid "Sunrise - "
-msgstr "זריחה – "
+msgid "Sunrise: "
+msgstr "זריחה: "
 
 #: /home/amiad/projects/gnome-hdate/extension.js:171
-msgid "Sunset - "
-msgstr "שקיעה – "
+msgid "Sunset: "
+msgstr "שקיעה: "
 
 #: /home/amiad/projects/gnome-hdate/extension.js:174
-msgid "First light - "
-msgstr "עלות השחר – "
+msgid "First light: "
+msgstr "עלות השחר: "
 
 #: /home/amiad/projects/gnome-hdate/extension.js:176
-msgid "First stars - "
-msgstr "צאת הכוכבים – "
+msgid "First stars: "
+msgstr "צאת הכוכבים: "
 
 #: /home/amiad/projects/gnome-hdate/extension.js:178
-msgid "Three stars - "
-msgstr "שלושה כוכבים – "
+msgid "Three stars: "
+msgstr "שלושה כוכבים: "
 
 #: /home/amiad/projects/gnome-hdate/extension.js:180
 msgid "Week's Torah: "
 msgstr "פרשת השבוע: "
+
+#~ msgid "Sunrise - "
+#~ msgstr "זריחה – "
+
+#~ msgid "Sunset - "
+#~ msgstr "שקיעה – "
+
+#~ msgid "First light - "
+#~ msgstr "עלות השחר – "
+
+#~ msgid "First stars - "
+#~ msgstr "צאת הכוכבים – "
+
+#~ msgid "Three stars - "
+#~ msgstr "שלושה כוכבים – "

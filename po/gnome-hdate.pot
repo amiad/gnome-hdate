@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-16 10:15+0200\n"
-"PO-Revision-Date: 2015-03-16 10:15+0200\n"
+"POT-Creation-Date: 2015-03-16 10:22+0200\n"
+"PO-Revision-Date: 2015-03-16 10:22+0200\n"
 "Last-Translator: Amiad B <translate AT hatul.info>\n"
 "Language-Team: \n"
 "Language: en\n"
@@ -22,23 +22,23 @@ msgstr ""
 "X-Poedit-SearchPath-0: /home/amiad/projects/gnome-hdate\n"
 
 #: /home/amiad/projects/gnome-hdate/extension.js:169
-msgid "Sunrise - "
+msgid "Sunrise: "
 msgstr ""
 
 #: /home/amiad/projects/gnome-hdate/extension.js:171
-msgid "Sunset - "
+msgid "Sunset: "
 msgstr ""
 
 #: /home/amiad/projects/gnome-hdate/extension.js:174
-msgid "First light - "
+msgid "First light: "
 msgstr ""
 
 #: /home/amiad/projects/gnome-hdate/extension.js:176
-msgid "First stars - "
+msgid "First stars: "
 msgstr ""
 
 #: /home/amiad/projects/gnome-hdate/extension.js:178
-msgid "Three stars - "
+msgid "Three stars: "
 msgstr ""
 
 #: /home/amiad/projects/gnome-hdate/extension.js:180

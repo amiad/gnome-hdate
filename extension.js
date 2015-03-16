@@ -166,16 +166,16 @@ const HdateButton = new Lang.Class({
 
         // create new menu items
         this._sunrise = new PopupMenu.PopupMenuItem(
-            _("Sunrise - ") + this.h.min_to_string(sunrise));
+            _("Sunrise: ") + this.h.min_to_string(sunrise));
         this._sunset = new PopupMenu.PopupMenuItem(
-            _("Sunset - ") + this.h.min_to_string(sunset));
+            _("Sunset: ") + this.h.min_to_string(sunset));
         this._sep = new PopupMenu.PopupSeparatorMenuItem();
         this._first_light = new PopupMenu.PopupMenuItem(
-            _("First light - ") + this.h.min_to_string(first_light));
+            _("First light: ") + this.h.min_to_string(first_light));
         this._first_stars = new PopupMenu.PopupMenuItem(
-            _("First stars - ") + this.h.min_to_string(first_stars));
+            _("First stars: ") + this.h.min_to_string(first_stars));
         this._three_stars = new PopupMenu.PopupMenuItem(
-            _("Three stars - ") + this.h.min_to_string(three_stars));
+            _("Three stars: ") + this.h.min_to_string(three_stars));
         this._portion = new PopupMenu.PopupMenuItem(
 		_("Week's Torah: ") + str_portion);
         
