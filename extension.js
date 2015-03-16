@@ -72,6 +72,7 @@ const HdateButton = new Lang.Class({
         this._first_light = null;
         this._first_stars = null;
         this._three_stars = null;
+        this._portion = null;
         
         // check label and menu evry 60 secs
         this._refresh_rate = 60;
@@ -112,6 +113,8 @@ const HdateButton = new Lang.Class({
             this._first_stars.destroy();
         if (this._three_stars)
             this._three_stars.destroy();
+        if (this._portion)
+            this._portion.destroy();
 
         // get the time-of-day times
         var sunrise = this.h.get_sunrise()
@@ -121,6 +124,46 @@ const HdateButton = new Lang.Class({
         var first_stars = this.h.get_first_stars()
         var three_stars = this.h.get_three_stars()
         
+    //calculate to print this week's parasha --hdate only prints iemei shabbat(!)
+	//and no shabbat values are present in VALA GLIB functions
+	
+	var portion_nbr = null;
+	var str_portion = null;
+	let portion = this.h.get_parasha();
+	
+	// if shabbat then its printing so fill variables and leave.
+	if (portion != 0) {
+
+		portion_nbr = this.h.get_parasha();
+		str_portion = this.h.get_parasha_string(portion_nbr);
+	}
+	
+	// else bruteforce calculate the next shabbat
+	// new to language so don't know if this is faster
+	// than Date(); getDay, getMonth() getYear() functions.
+
+	else {	
+		let a_day = this.h.get_gday();
+		let a_month = this.h.get_gmonth();
+		let a_year = this.h.get_gyear();
+
+		do {	
+
+			this.temp = Hdate.new();		
+			this.temp.set_use_hebrew(false);
+			this.temp.set_gdate(a_day,a_month,a_year);
+			portion_nbr = this.temp.get_parasha();
+			str_portion = this.temp.get_parasha_string(portion_nbr);
+			//this.temp.destroy(); breaks it
+			//Don't know if this.temp = Hdate.new() being created
+			//all the time overwrites the previous aka destroyed
+			//or if it gets stored somewhere (=bad practice)
+			a_day++;
+		}
+		while (portion_nbr == 0);
+	}
+	// end result = parsha string in str_portion variable which prints below
+
         // create new menu items
         this._sunrise = new PopupMenu.PopupMenuItem(
             _("Sunrise - ") + this.h.min_to_string(sunrise));
@@ -133,6 +176,8 @@ const HdateButton = new Lang.Class({
             _("First stars - ") + this.h.min_to_string(first_stars));
         this._three_stars = new PopupMenu.PopupMenuItem(
             _("Three stars - ") + this.h.min_to_string(three_stars));
+        this._portion = new PopupMenu.PopupMenuItem(
+		_("Week's Torah: ") + str_portion);
         
         this.menu.addMenuItem(this._sunrise);
         this.menu.addMenuItem(this._sunset);
@@ -140,6 +185,7 @@ const HdateButton = new Lang.Class({
         this.menu.addMenuItem(this._first_light);
         this.menu.addMenuItem(this._first_stars);
         this.menu.addMenuItem(this._three_stars);
+        this.menu.addMenuItem(this._portion);
     },
     
     _refresh: function() {
