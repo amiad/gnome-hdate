@@ -176,6 +176,7 @@ const HdateButton = new Lang.Class({
             _("First stars: ") + this.h.min_to_string(first_stars));
         this._three_stars = new PopupMenu.PopupMenuItem(
             _("Three stars: ") + this.h.min_to_string(three_stars));
+        this._sep2 = new PopupMenu.PopupSeparatorMenuItem();
         this._portion = new PopupMenu.PopupMenuItem(
 		_("Week's Torah: ") + str_portion);
         
@@ -185,6 +186,7 @@ const HdateButton = new Lang.Class({
         this.menu.addMenuItem(this._first_light);
         this.menu.addMenuItem(this._first_stars);
         this.menu.addMenuItem(this._three_stars);
+        this.menu.addMenuItem(this._sep2);
         this.menu.addMenuItem(this._portion);
     },
     
