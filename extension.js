@@ -134,8 +134,10 @@ const HdateButton = new Lang.Class({
 	// if shabbat then its printing so fill variables and leave.
 	if (portion != 0) {
 
-		portion_nbr = this.h.get_parasha();
-		str_portion = this.h.get_parasha_string(portion_nbr);
+		this.temp = Hdate.new();		
+		this.temp.set_use_hebrew(false);
+		portion_nbr = this.temp.get_parasha();
+		str_portion = this.temp.get_parasha_string(portion_nbr);
 	}
 	
 	// else bruteforce calculate the next shabbat
