@@ -13,7 +13,7 @@
   ],
   "uuid": "hdate@hatul.info",
   "name": "Gnome HDate", 
-  "description": "Show Hebrew Date in the Panel",
+  "description": "Show Hebrew Date in the Panel.\nRequires libhdate-glib",
   "url": "https://github.com/amiad/gnome-hdate",
   "version": "12"  
 }
