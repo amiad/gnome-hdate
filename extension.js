@@ -94,7 +94,13 @@ const HdateButton = new Lang.Class({
         if (holyday != 0) {
           label_string += ", " + this.h.get_holyday_string( holyday );
         }
-        
+
+        // check for omer
+        let omer = this.h.get_omer_day();
+        if (omer != 0) {
+          label_string += ", " + this.h.get_int_string( omer ) + ' לעומר';
+        }
+
         // set the button label
         this.buttonText.set_text(label_string);
     },
