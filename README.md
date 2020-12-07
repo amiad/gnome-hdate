@@ -8,6 +8,8 @@ Gnome-shell extension for show Hebrew date in the panel.
 * [libhdate](http://libhdate.sourceforge.net/)>=1.6 - Existing in repositories of most distributions.
 * [libhdate-glib](http://libhdate-glib.googlecode.com/)>=0.5 - Arch: [AUR](https://aur.archlinux.org/packages/libhdate-glib/), Debian/Ubuntu: [64 bit](http://code.google.com/p/libhdate-glib/downloads/detail?name=libhdate-glib_0.5.0-1_amd64.deb&can=2&q=).
 
+[How install the dependencies on Ubuntu from whatsup forum](https://whatsup.org.il/index.php?name=PNphpBB2&file=viewtopic&p=430129#430129) (thanks to Nachum).
+
 ## Installation
 Install from [GNOME Shell extensions site](https://extensions.gnome.org/extension/554/gnome-hdate/).
 
