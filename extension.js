@@ -215,7 +215,7 @@ const HdateButton = new GObject.registerClass({
         this.jd = this.h.get_julian();
         
         return true;
-    },
+    }
 
     destroy() {
         if(this._timeout) {
