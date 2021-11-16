@@ -7,7 +7,6 @@ const St = imports.gi.St;
 const Main = imports.ui.main;
 const Shell = imports.gi.Shell;
 const Mainloop = imports.mainloop;
-const Lang = imports.lang;
 const PopupMenu = imports.ui.popupMenu;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Config = imports.misc.config;
@@ -42,12 +41,13 @@ const _ = Gettext.gettext;
 
 let _hdateButton = null;
 
-const HdateButton = new Lang.Class({
-    Name: 'HdateButton',
-    Extends: PanelMenu.Button,
+const HdateButton = new GObject.registerClass({
+    GTypeName: 'HdateButton'
+    }, class HdateButton
+    extends PanelMenu.Button {
 
-    _init: function() {
-        this.parent(0.0, "Hdate Button", false);
+    _init() {
+        super._init(0.0, "Hdate Button", false);
         
         // make label 
         this.buttonText = new St.Label({y_expand: true, y_align: Clutter.ActorAlign.CENTER});
@@ -76,13 +76,13 @@ const HdateButton = new Lang.Class({
         
         // check label and menu evry 60 secs
         this._refresh_rate = 60;
-        this._timeout = Mainloop.timeout_add_seconds(this._refresh_rate, Lang.bind(this, this._refresh));
+        this._timeout = Mainloop.timeout_add_seconds(this._refresh_rate, this._refresh.bind(this));
         
         // refresh view
         this._refresh();
-    },
+    }
     
-    _refresh_button_label: function() {
+    _refresh_button_label() {
         // create the hebrew date label. we can use the standart this.h.to_string()
         // function or create the string.
         let label_string = this.h.get_int_string( this.h.get_hday() );
@@ -103,9 +103,9 @@ const HdateButton = new Lang.Class({
 
         // set the button label
         this.buttonText.set_text(label_string);
-    },
+    }
     
-    _refresh_button_menu: function() {
+    _refresh_button_menu() {
         // remove the old menu items
         if (this._sunrise)
             this._sunrise.destroy();
@@ -196,9 +196,9 @@ const HdateButton = new Lang.Class({
         this.menu.addMenuItem(this._three_stars);
         this.menu.addMenuItem(this._sep2);
         this.menu.addMenuItem(this._portion);
-    },
+    }
     
-    _refresh: function() {
+    _refresh() {
         // set the h object date to today 
         this.h.set_today();
         
@@ -217,7 +217,7 @@ const HdateButton = new Lang.Class({
         return true;
     },
 
-    destroy: function() {
+    destroy() {
         if(this._timeout) {
             Mainloop.source_remove(this._timeout);
             this._timeout = null;
