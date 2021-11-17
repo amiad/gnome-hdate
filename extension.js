@@ -12,6 +12,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Config = imports.misc.config;
 const Gettext = imports.gettext;
 const Clutter = imports.gi.Clutter;
+const GObject = imports.gi.GObject;
 
 const Hdate = imports.gi.LibHdateGlib.Hdate;
 
