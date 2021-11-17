@@ -223,7 +223,7 @@ const HdateButton = new GObject.registerClass({
             Mainloop.source_remove(this._timeout);
             this._timeout = null;
         }
-        this.parent();
+       super._init();
     }
 });
 
