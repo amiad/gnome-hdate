@@ -2,17 +2,16 @@
 // see:
 //    https://github.com/amiad/gnome-hdate
 
-const PanelMenu = imports.ui.panelMenu;
-const St = imports.gi.St;
-const Main = imports.ui.main;
-const Shell = imports.gi.Shell;
+import * as PanelMenu from  'resource:///org/gnome/shell/ui/panelMenu.js';
+import St from 'gi://St';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import Shell from 'gi://Shell';
 const Mainloop = imports.mainloop;
-const PopupMenu = imports.ui.popupMenu;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Config = imports.misc.config;
-const Gettext = imports.gettext;
-const Clutter = imports.gi.Clutter;
-const GObject = imports.gi.GObject;
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Config from  'resource:///org/gnome/shell/misc/config.js';
+import Clutter from 'gi://Clutter';
+import GObject from 'gi://GObject';
 
 const Hdate = imports.gi.LibHdateGlib.Hdate;
 
@@ -26,17 +25,11 @@ const Hdate = imports.gi.LibHdateGlib.Hdate;
     to update:
     1. msgmerge -U he.po messages.pot
  */
-let domain = "gnome-hdate"
-let extension = ExtensionUtils.getCurrentExtension();
-let locale_dir = extension.dir.get_child('locale');
 
-Gettext.textdomain(domain);
-if (locale_dir.query_exists(null))
-    Gettext.bindtextdomain(domain, locale_dir.get_path());
-else
-    Gettext.bindtextdomain(domain, Config.LOCALEDIR);
-
-const _ = Gettext.gettext;
+/* Only specify gettext-domain in metadata.json. GNOME Shell can automatically initiate the translation for you when it sees the gettext-domain key in metadata.json. The extension module offers
+translation functions (gettext, ngettext and pgettext). Import those directly
+;madhu 231108
+*/
 
 /* end of translation functionality */
 
@@ -252,3 +245,13 @@ function disable() {
         _hdateButton = null;
     }
 }
+
+export default class HDate extends Extension {
+    constructor(metadata) {
+	super(metadata);
+	init(metadata);
+    }
+    enable() { enable(); }
+    disable() { disable(); }
+}
+
