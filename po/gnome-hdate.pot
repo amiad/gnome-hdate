@@ -3,44 +3,40 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-16 10:22+0200\n"
-"PO-Revision-Date: 2015-03-16 10:22+0200\n"
-"Last-Translator: Amiad B <translate AT hatul.info>\n"
-"Language-Team: \n"
-"Language: en\n"
+"POT-Creation-Date: 2023-11-13 18:50+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.4\n"
-"X-Poedit-KeywordsList: _\n"
-"X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: /home/amiad/projects/gnome-hdate\n"
 
-#: /home/amiad/projects/gnome-hdate/extension.js:169
+#: extension.js:151
 msgid "Sunrise: "
 msgstr ""
 
-#: /home/amiad/projects/gnome-hdate/extension.js:171
+#: extension.js:153
 msgid "Sunset: "
 msgstr ""
 
-#: /home/amiad/projects/gnome-hdate/extension.js:174
+#: extension.js:156
 msgid "First light: "
 msgstr ""
 
-#: /home/amiad/projects/gnome-hdate/extension.js:176
+#: extension.js:158
 msgid "First stars: "
 msgstr ""
 
-#: /home/amiad/projects/gnome-hdate/extension.js:178
+#: extension.js:160
 msgid "Three stars: "
 msgstr ""
 
-#: /home/amiad/projects/gnome-hdate/extension.js:180
+#: extension.js:163
 msgid "Week's Torah: "
 msgstr ""

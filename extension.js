@@ -1,37 +1,17 @@
-// based on amiads hdate@hatul.info Hdate extension
-// see:
 //    https://github.com/amiad/gnome-hdate
 
 import * as PanelMenu from  'resource:///org/gnome/shell/ui/panelMenu.js';
 import St from 'gi://St';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import Shell from 'gi://Shell';
-const Mainloop = imports.mainloop;
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Config from  'resource:///org/gnome/shell/misc/config.js';
 import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
+import GLib from 'gi://GLib';
 
-const Hdate = imports.gi.LibHdateGlib.Hdate;
-
-/* start of translation functionality 
-
-    to translate:
-    1. xgettext -k_ -kN_ -o messages.pot extension.js
-    2. create the he.po file
-    3. msgfmt he.po -o locale/he/LC_MESSAGES/hdate_button.mo
-    
-    to update:
-    1. msgmerge -U he.po messages.pot
- */
-
-/* Only specify gettext-domain in metadata.json. GNOME Shell can automatically initiate the translation for you when it sees the gettext-domain key in metadata.json. The extension module offers
-translation functions (gettext, ngettext and pgettext). Import those directly
-;madhu 231108
-*/
-
-/* end of translation functionality */
+import LibHDateGLib from 'gi://LibHdateGlib';
 
 let _hdateButton = null;
 
@@ -45,10 +25,10 @@ const HdateButton = new GObject.registerClass({
         
         // make label 
         this.buttonText = new St.Label({y_expand: true, y_align: Clutter.ActorAlign.CENTER});
-        this.actor.add_actor(this.buttonText);
+        this.add_actor(this.buttonText);
         
         // init the hebrew date object
-        this.h = Hdate.new();
+        this.h = LibHDateGLib.Hdate.new();
         this.h.set_longitude(34.77);
         this.h.set_latitude(32.07);
         this.h.set_tz(2);
@@ -70,7 +50,7 @@ const HdateButton = new GObject.registerClass({
         
         // check label and menu evry 60 secs
         this._refresh_rate = 60;
-        this._timeout = Mainloop.timeout_add_seconds(this._refresh_rate, this._refresh.bind(this));
+        this._timeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, this._refresh_rate, this._refresh.bind(this));
         
         // refresh view
         this._refresh();
@@ -134,7 +114,7 @@ const HdateButton = new GObject.registerClass({
 	// if shabbat then its printing so fill variables and leave.
 	if (portion != 0) {
 
-		this.temp = Hdate.new();		
+		this.temp = LibHDateGLib.Hdate.new();		
 		this.temp.set_use_hebrew(false);
 		portion_nbr = this.temp.get_parasha();
 		str_portion = this.temp.get_parasha_string(portion_nbr);
@@ -151,13 +131,13 @@ const HdateButton = new GObject.registerClass({
 
 		do {	
 
-			this.temp = Hdate.new();		
+			this.temp = LibHDateGLib.Hdate.new();		
 			this.temp.set_use_hebrew(false);
 			this.temp.set_gdate(a_day,a_month,a_year);
 			portion_nbr = this.temp.get_parasha();
 			str_portion = this.temp.get_parasha_string(portion_nbr);
 			//this.temp.destroy(); breaks it
-			//Don't know if this.temp = Hdate.new() being created
+			//Don't know if this.temp = LibHDateGLib.Hdate.new() being created
 			//all the time overwrites the previous aka destroyed
 			//or if it gets stored somewhere (=bad practice)
 			a_day++;
@@ -213,45 +193,23 @@ const HdateButton = new GObject.registerClass({
 
     destroy() {
         if(this._timeout) {
-            Mainloop.source_remove(this._timeout);
+            GLib.source_remove(this._timeout);
             this._timeout = null;
         }
        super._init();
     }
 });
 
-// init function
-function init(metadata) {
-}
-
-// enable function
-function enable() {
-    try {
-        _hdateButton = new HdateButton;
-        Main.panel.addToStatusArea('hdate-button', _hdateButton, 0, "center");
-        //Main.panel._rightBox.insert_child_at_index(_hdateButton, 0);
-    }
-    catch(err) {
-        global.log("Error: Hdate button extension: " + err.message);
-        _hdateButton.destroy();
-        _hdateButton = null;
-    }
-}
-
-// disable function
-function disable() {
-    if(_hdateButton) {
-        _hdateButton.destroy();
-        _hdateButton = null;
-    }
-}
-
 export default class HDate extends Extension {
-    constructor(metadata) {
-	super(metadata);
-	init(metadata);
-    }
-    enable() { enable(); }
-    disable() { disable(); }
+	enable() {
+		_hdateButton = new HdateButton;
+		Main.panel.addToStatusArea('hdate-button', _hdateButton, 0, "center");
+	}
+	disable() {
+	    if(_hdateButton) {
+		_hdateButton.destroy();
+		_hdateButton = null;
+	    }
+	}
 }
 
