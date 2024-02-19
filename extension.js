@@ -20,12 +20,12 @@ const HdateButton = new GObject.registerClass({
     }, class HdateButton
     extends PanelMenu.Button {
 
-    _init() {
-        super._init(0.0, "Hdate Button", false);
+    constructor() {
+        super(0.0, "Hdate Button", false);
         
         // make label 
         this.buttonText = new St.Label({y_expand: true, y_align: Clutter.ActorAlign.CENTER});
-        this.add_actor(this.buttonText);
+        this.add_child(this.buttonText);
         
         // init the hebrew date object
         this.h = LibHDateGLib.Hdate.new();
@@ -196,19 +196,20 @@ const HdateButton = new GObject.registerClass({
             GLib.source_remove(this._timeout);
             this._timeout = null;
         }
-       super._init();
+       super.destroy();
     }
 });
 
 export default class HDate extends Extension {
 	enable() {
-		_hdateButton = new HdateButton;
-		Main.panel.addToStatusArea('hdate-button', _hdateButton, 0, "center");
+		this._hdateButton = new HdateButton;
+		Main.panel.addToStatusArea('hdate-button', this._hdateButton, 0, "center");
 	}
 	disable() {
-	    if(_hdateButton) {
-		_hdateButton.destroy();
-		_hdateButton = null;
+	    if(this._hdateButton) {
+		this._hdateButton.destroy();
+		delete this._hdateButton;
+		this._hdateButton = null;
 	    }
 	}
 }
