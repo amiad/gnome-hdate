@@ -5,7 +5,10 @@
   "name": "Gnome HDate",
   "shell-version": [
     "45",
-    "46"
+    "46",
+    "47",
+    "48",
+    "49"
   ],
   "url": "https://github.com/amiad/gnome-hdate",
   "uuid": "hdate@hatul.info",
