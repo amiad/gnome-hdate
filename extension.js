@@ -10,10 +10,61 @@ import * as Config from  'resource:///org/gnome/shell/misc/config.js';
 import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 
 import LibHDateGLib from 'gi://LibHdateGlib';
 
 let _hdateButton = null;
+
+// Settings management
+const SETTINGS_DIR = GLib.get_user_config_dir() + '/gnome-shell/extensions/hdate@hatul.info';
+const SETTINGS_FILE = SETTINGS_DIR + '/settings.json';
+
+function ensureSettingsDir() {
+    let dir = Gio.File.new_for_path(SETTINGS_DIR);
+    if (!dir.query_exists(null)) {
+        try {
+            dir.make_directory_with_parents(null);
+        } catch (e) {
+            logError(e);
+        }
+    }
+}
+
+function loadSettings() {
+    ensureSettingsDir();
+    let file = Gio.File.new_for_path(SETTINGS_FILE);
+
+    let defaults = { longitude: 34.77, latitude: 32.07, tz: 2 };
+
+    if (!file.query_exists(null)) {
+        return defaults;
+    }
+
+    try {
+        let [success, contents] = file.load_contents(null);
+        if (success) {
+            let data = JSON.parse(contents);
+            return Object.assign({}, defaults, data);
+        }
+    } catch (e) {
+        logError(e);
+    }
+
+    return defaults;
+}
+
+function saveSettings(settings) {
+    ensureSettingsDir();
+    let file = Gio.File.new_for_path(SETTINGS_FILE);
+    
+    try {
+        let data = JSON.stringify(settings);
+        file.replace_contents(data, null, false, Gio.FileCreateFlags.NONE, null);
+    } catch (e) {
+        logError(e);
+    }
+}
 
 const HdateButton = new GObject.registerClass({
     GTypeName: 'HdateButton'
@@ -27,13 +78,15 @@ const HdateButton = new GObject.registerClass({
         this.buttonText = new St.Label({y_expand: true, y_align: Clutter.ActorAlign.CENTER});
         this.add_child(this.buttonText);
         
+        // load settings
+        let settings = loadSettings();
+        this.settings = settings;
+        
         // init the hebrew date object
         this.h = LibHDateGLib.Hdate.new();
-        this.h.set_longitude(34.77);
-        this.h.set_latitude(32.07);
-        this.h.set_tz(2);
         this.h.set_dst(0);
         this.jd = 0;
+        this._applySettings();
 
         // force long format hebrew output
         this.h.set_use_hebrew(true);
@@ -47,6 +100,8 @@ const HdateButton = new GObject.registerClass({
         this._first_stars = null;
         this._three_stars = null;
         this._portion = null;
+        this._location = null;
+        this._settings_button = null;
         
         // check label and menu evry 60 secs
         this._refresh_rate = 60;
@@ -56,6 +111,16 @@ const HdateButton = new GObject.registerClass({
         this._refresh();
     }
     
+    _applySettings() {
+        // Ensure the internal libhdate object uses the configured location/timezone
+        this.h.set_longitude(this.settings.longitude);
+        this.h.set_latitude(this.settings.latitude);
+        this.h.set_tz(this.settings.tz);
+
+        this._refresh_button_menu(); // Force menu refresh with new location
+        this._refresh();
+    }
+
     _refresh_button_label() {
         // create the hebrew date label. we can use the standart this.h.to_string()
         // function or create the string.
@@ -79,6 +144,203 @@ const HdateButton = new GObject.registerClass({
         this.buttonText.set_text(label_string);
     }
     
+    _openSettingsDialog() {
+        let dialog = new St.BoxLayout({
+            vertical: true,
+            style_class: 'hddate-settings-dialog'
+        });
+        
+        let titleLabel = new St.Label({
+            text: _('Edit Location Settings'),
+            style_class: 'hddate-settings-title'
+        });
+        dialog.add_child(titleLabel);
+
+        // Longitude input
+        let longtitudeBox = new St.BoxLayout({
+            vertical: false,
+            style: 'spacing: 10px; margin: 10px;'
+        });
+        let lonLabel = new St.Label({ text: _('Longitude:') });
+        let lonInput = new St.Entry({
+            text: this.settings.longitude.toString(),
+            style: 'width: 150px;'
+        });
+        longtitudeBox.add_child(lonLabel);
+        longtitudeBox.add_child(lonInput);
+        dialog.add_child(longtitudeBox);
+
+        // Latitude input
+        let latitudeBox = new St.BoxLayout({
+            vertical: false,
+            style: 'spacing: 10px; margin: 10px;'
+        });
+        let latLabel = new St.Label({ text: _('Latitude:') });
+        let latInput = new St.Entry({
+            text: this.settings.latitude.toString(),
+            style: 'width: 150px;'
+        });
+        latitudeBox.add_child(latLabel);
+        latitudeBox.add_child(latInput);
+        dialog.add_child(latitudeBox);
+
+        // Time zone entry (free-form)
+        function formatTz(val) {
+            let sign = val >= 0 ? '+' : '';
+            return `UTC${sign}${val}`;
+        }
+
+        function parseTz(text) {
+            if (!text) return NaN;
+            let cleaned = text.toUpperCase().trim();
+            if (cleaned.startsWith('UTC'))
+                cleaned = cleaned.slice(3).trim();
+            // allow values like +2, -4, 2, 0
+            let num = parseFloat(cleaned);
+            return isNaN(num) ? NaN : num;
+        }
+
+        let tzEntry = new St.Entry({
+            text: formatTz(this.settings.tz),
+            style: 'width: 320px; margin: 10px;'
+        });
+        let tzEntryLabel = new St.Label({ text: _('Timezone (UTC offset):') });
+        let tzEntryBox = new St.BoxLayout({
+            vertical: false,
+            style: 'spacing: 10px; margin: 10px;'
+        });
+        tzEntryBox.add_child(tzEntryLabel);
+        tzEntryBox.add_child(tzEntry);
+        dialog.add_child(tzEntryBox);
+
+        // Time zone dropdown (common locations)
+        let tzOptions = [
+            { label: _('Jerusalem (UTC+2)'), value: 2 },
+            { label: _('New York (UTC-4)'), value: -4 },
+            { label: _('London (UTC+0)'), value: 0 },
+            { label: _('Paris (UTC+1)'), value: 1 },
+            { label: _('Moscow (UTC+3)'), value: 3 },
+            { label: _('Johannesburg (UTC+2)'), value: 2 },
+            { label: _('Buenos Aires (UTC-3)'), value: -3 },
+            { label: _('Los Angeles (UTC-7)'), value: -7 },
+            { label: _('Toronto (UTC-4)'), value: -4 },
+            { label: _('Melbourne (UTC+11)'), value: 11 }
+        ];
+
+        let selectedTz = this.settings.tz;
+
+        function tzLabel(val) {
+            let sign = val >= 0 ? '+' : '';
+            return _('Time zone:') + ` UTC${sign}${val}`;
+        }
+
+        let tzButton = new St.Button({
+            label: tzLabel(selectedTz),
+            style: 'width: 320px; margin: 10px; text-align: left;'
+        });
+
+        let tzListBox = new St.BoxLayout({
+            vertical: true,
+            style: 'spacing: 4px; padding: 5px;'
+        });
+
+        for (let option of tzOptions) {
+            let item = new St.Button({
+                label: option.label,
+                style: 'justify-content: flex-start; text-align: left;'
+            });
+            item.connect('clicked', () => {
+                selectedTz = option.value;
+                tzButton.set_label(tzLabel(selectedTz));
+                tzEntry.text = formatTz(selectedTz);
+                tzList.visible = false;
+            });
+            tzListBox.add_child(item);
+        }
+
+        let tzList = new St.ScrollView({
+            style: 'background: rgba(255,255,255,0.95); border: 1px solid rgba(0,0,0,0.2); max-height: 180px; width: 340px; margin-left: 10px; margin-right: 10px;',
+            x_expand: true,
+            y_expand: false
+        });
+        tzList.add_child(tzListBox);
+        tzList.visible = true;
+
+        tzButton.connect('clicked', () => {
+            // Dropdown is now always visible, no toggle needed
+        });
+
+        dialog.add_child(tzButton);
+        dialog.add_child(tzList);
+
+        // Button container
+        let buttonBox = new St.BoxLayout({
+            vertical: false,
+            style: 'spacing: 10px; margin: 10px;'
+        });
+
+        let okButton = new St.Button({
+            label: _('OK'),
+            style_class: 'button'
+        });
+
+        let cancelButton = new St.Button({
+            label: _('Cancel'),
+            style_class: 'button'
+        });
+
+        buttonBox.add_child(okButton);
+        buttonBox.add_child(cancelButton);
+        dialog.add_child(buttonBox);
+
+        // Create modal
+        let actor = new Clutter.Actor();
+        let background = new St.Widget({
+            reactive: true,
+            x_expand: true,
+            y_expand: true,
+            style: 'background-color: rgba(0, 0, 0, 0.7);'
+        });
+
+        let dialogContainer = new St.BoxLayout({
+            vertical: true,
+            reactive: true,
+            style: 'background-color: #f0f0f0; border-radius: 10px; padding: 20px; width: 360px; margin-top: 50px;'
+        });
+        dialogContainer.set_x_align(Clutter.ActorAlign.CENTER);
+        dialogContainer.set_y_align(Clutter.ActorAlign.START);
+        dialogContainer.add_child(dialog);
+
+        background.add_child(dialogContainer);
+
+        okButton.connect('clicked', () => {
+            let lon = parseFloat(lonInput.text);
+            let lat = parseFloat(latInput.text);
+            let tzFromEntry = parseTz(tzEntry.text);
+            let tz = !isNaN(tzFromEntry) ? tzFromEntry : selectedTz;
+
+            if (!isNaN(lon) && !isNaN(lat)) {
+                this.settings.longitude = lon;
+                this.settings.latitude = lat;
+                this.settings.tz = tz;
+                saveSettings(this.settings);
+
+                this._applySettings();
+
+                Main.uiGroup.remove_child(background);
+                background.destroy();
+            }
+        });
+
+        cancelButton.connect('clicked', () => {
+            Main.uiGroup.remove_child(background);
+            background.destroy();
+        });
+
+        Main.uiGroup.add_child(background);
+    }
+    
+    
     _refresh_button_menu() {
         // remove the old menu items
         if (this._sunrise)
@@ -95,6 +357,10 @@ const HdateButton = new GObject.registerClass({
             this._three_stars.destroy();
         if (this._portion)
             this._portion.destroy();
+        if (this._location)
+            this._location.destroy();
+        if (this._settings_button)
+            this._settings_button.destroy();
 
         // get the time-of-day times
         var sunrise = this.h.get_sunrise()
@@ -170,6 +436,23 @@ const HdateButton = new GObject.registerClass({
         this.menu.addMenuItem(this._three_stars);
         this.menu.addMenuItem(this._sep2);
         this.menu.addMenuItem(this._portion);
+
+        // Current location info
+        this._location = new PopupMenu.PopupMenuItem(
+            _('Location: ') + `${this.settings.longitude.toFixed(2)}, ${this.settings.latitude.toFixed(2)} (UTC${this.settings.tz >= 0 ? '+' : ''}${this.settings.tz})`);
+        this._location.setSensitive(false);
+        this.menu.addMenuItem(this._location);
+
+        // Add settings separator and button
+        let sep3 = new PopupMenu.PopupSeparatorMenuItem();
+        this.menu.addMenuItem(sep3);
+
+        this._settings_button = new PopupMenu.PopupMenuItem(
+            _('Location Settings ⚙'));
+        this._settings_button.connect('activate', () => {
+            this._openSettingsDialog();
+        });
+        this.menu.addMenuItem(this._settings_button);
     }
     
     _refresh() {
