@@ -82,7 +82,7 @@ const HdateButton = new GObject.registerClass({
         let settings = loadSettings();
         this.settings = settings;
         
-        // init the hebrew date object
+        // init the hebrew date objectq
         this.h = LibHDateGLib.Hdate.new();
         this.h.set_dst(0);
         this.jd = 0;
@@ -117,8 +117,10 @@ const HdateButton = new GObject.registerClass({
         this.h.set_latitude(this.settings.latitude);
         this.h.set_tz(this.settings.tz);
 
-        this._refresh_button_menu(); // Force menu refresh with new location
-        this._refresh();
+        this.h.set_use_hebrew(true);
+        this.h.set_use_short_format(false);
+
+        // Don't call _refresh_button_menu() here - _refresh() will handle it
     }
 
     _refresh_button_label() {
@@ -156,33 +158,42 @@ const HdateButton = new GObject.registerClass({
         });
         dialog.add_child(titleLabel);
 
-        // Longitude input
-        let longtitudeBox = new St.BoxLayout({
-            vertical: false,
+        // Create table-like layout for coordinates using BoxLayout
+        let coordContainer = new St.BoxLayout({
+            vertical: true,
             style: 'spacing: 10px; margin: 10px;'
         });
-        let lonLabel = new St.Label({ text: _('Longitude:') });
-        let lonInput = new St.Entry({
-            text: this.settings.longitude.toString(),
-            style: 'width: 150px;'
-        });
-        longtitudeBox.add_child(lonLabel);
-        longtitudeBox.add_child(lonInput);
-        dialog.add_child(longtitudeBox);
 
-        // Latitude input
-        let latitudeBox = new St.BoxLayout({
+        // Latitude row
+        let latBox = new St.BoxLayout({
             vertical: false,
-            style: 'spacing: 10px; margin: 10px;'
+            style: 'spacing: 10px;'
         });
-        let latLabel = new St.Label({ text: _('Latitude:') });
+        let latLabel = new St.Label({ text: _('Latitude (°N):'), style: 'width: 120px;' });
         let latInput = new St.Entry({
             text: this.settings.latitude.toString(),
             style: 'width: 150px;'
         });
-        latitudeBox.add_child(latLabel);
-        latitudeBox.add_child(latInput);
-        dialog.add_child(latitudeBox);
+        latBox.add_child(latLabel);
+        latBox.add_child(latInput);
+        coordContainer.add_child(latBox);
+
+        // Longitude row
+        let lonBox = new St.BoxLayout({
+            vertical: false,
+            style: 'spacing: 10px;'
+        });
+        let lonLabel = new St.Label({ text: _('Longitude (°E):'), style: 'width: 120px;' });
+        let lonInput = new St.Entry({
+            text: this.settings.longitude.toString(),
+            style: 'width: 150px;'
+        });
+        lonBox.add_child(lonLabel);
+        lonBox.add_child(lonInput);
+        coordContainer.add_child(lonBox);
+
+        dialog.add_child(coordContainer);
+
 
         // Time zone entry (free-form)
         function formatTz(val) {
@@ -244,19 +255,38 @@ const HdateButton = new GObject.registerClass({
             style: 'spacing: 4px; padding: 5px;'
         });
 
+        let items = []; // Store items with their values for highlighting
+
+        function updateHighlight() {
+            // Highlight item matching current selectedTz
+            for (let itemData of items) {
+                if (itemData.value === selectedTz) {
+                    itemData.item.set_style('justify-content: flex-start; text-align: left; background-color: rgba(0, 100, 200, 0.3); border-radius: 5px; padding: 5px;');
+                } else {
+                    itemData.item.set_style('justify-content: flex-start; text-align: left;');
+                }
+            }
+        }
+
         for (let option of tzOptions) {
             let item = new St.Button({
                 label: option.label,
                 style: 'justify-content: flex-start; text-align: left;'
             });
+            
+            items.push({ item: item, value: option.value });
+            
             item.connect('clicked', () => {
                 selectedTz = option.value;
+                updateHighlight();
                 tzButton.set_label(tzLabel(selectedTz));
                 tzEntry.text = formatTz(selectedTz);
-                tzList.visible = false;
             });
             tzListBox.add_child(item);
         }
+
+        // Highlight the current selection on dialog open
+        updateHighlight();
 
         let tzList = new St.ScrollView({
             style: 'background: rgba(255,255,255,0.95); border: 1px solid rgba(0,0,0,0.2); max-height: 180px; width: 340px; margin-left: 10px; margin-right: 10px;',
@@ -264,19 +294,14 @@ const HdateButton = new GObject.registerClass({
             y_expand: false
         });
         tzList.add_child(tzListBox);
-        tzList.visible = true;
-
-        tzButton.connect('clicked', () => {
-            // Dropdown is now always visible, no toggle needed
-        });
 
         dialog.add_child(tzButton);
         dialog.add_child(tzList);
 
-        // Button container
+        // Button container (centered)
         let buttonBox = new St.BoxLayout({
             vertical: false,
-            style: 'spacing: 10px; margin: 10px;'
+            style: 'spacing: 10px; margin: 10px; justify-content: center;'
         });
 
         let okButton = new St.Button({
@@ -294,21 +319,23 @@ const HdateButton = new GObject.registerClass({
         dialog.add_child(buttonBox);
 
         // Create modal
-        let actor = new Clutter.Actor();
         let background = new St.Widget({
-            reactive: true,
-            x_expand: true,
-            y_expand: true,
-            style: 'background-color: rgba(0, 0, 0, 0.7);'
+            reactive: true
         });
+        
 
         let dialogContainer = new St.BoxLayout({
             vertical: true,
             reactive: true,
-            style: 'background-color: #f0f0f0; border-radius: 10px; padding: 20px; width: 360px; margin-top: 50px;'
+            style: 'background-color: #f0f0f0; border-radius: 10px; padding: 20px; width: 360px;'
         });
-        dialogContainer.set_x_align(Clutter.ActorAlign.CENTER);
-        dialogContainer.set_y_align(Clutter.ActorAlign.START);
+        
+        // Center horizontally and position near top
+        let monitor = Main.layoutManager.primaryMonitor;
+        dialogContainer.set_position(
+            Math.floor((monitor.width - 360) / 2), // Center horizontally
+            35 // Small offset from top
+        );
         dialogContainer.add_child(dialog);
 
         background.add_child(dialogContainer);
@@ -326,6 +353,7 @@ const HdateButton = new GObject.registerClass({
                 saveSettings(this.settings);
 
                 this._applySettings();
+                this._refresh_button_menu(); // Force menu refresh with new location
 
                 Main.uiGroup.remove_child(background);
                 background.destroy();
