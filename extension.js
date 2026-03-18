@@ -117,7 +117,7 @@ const HdateButton = new GObject.registerClass({
         this.h.set_latitude(this.settings.latitude);
         this.h.set_tz(this.settings.tz);
 
-        this.h.set_use_hebrew(true);
+        this.h.set_use_hebrew(true); // I don't know why I need to reset this, but otherwise it appears as English
         this.h.set_use_short_format(false);
 
         // Don't call _refresh_button_menu() here - _refresh() will handle it
@@ -154,7 +154,10 @@ const HdateButton = new GObject.registerClass({
         
         let titleLabel = new St.Label({
             text: _('Edit Location Settings'),
-            style_class: 'hddate-settings-title'
+            style_class: 'hddate-settings-title',
+            style: 'font-size: 16px; font-weight: bold;',
+            x_align: Clutter.ActorAlign.CENTER,
+            x_expand: true
         });
         dialog.add_child(titleLabel);
 
@@ -169,10 +172,15 @@ const HdateButton = new GObject.registerClass({
             vertical: false,
             style: 'spacing: 10px;'
         });
-        let latLabel = new St.Label({ text: _('Latitude (°N):'), style: 'width: 120px;' });
+        let latLabel = new St.Label({ 
+            text: _('Latitude (°N):'), 
+            style: 'width: 120px;',
+            y_align: Clutter.ActorAlign.CENTER
+        });
         let latInput = new St.Entry({
             text: this.settings.latitude.toString(),
-            style: 'width: 150px;'
+            style: 'width: 150px;',
+            y_align: Clutter.ActorAlign.CENTER
         });
         latBox.add_child(latLabel);
         latBox.add_child(latInput);
@@ -183,10 +191,15 @@ const HdateButton = new GObject.registerClass({
             vertical: false,
             style: 'spacing: 10px;'
         });
-        let lonLabel = new St.Label({ text: _('Longitude (°E):'), style: 'width: 120px;' });
+        let lonLabel = new St.Label({ 
+            text: _('Longitude (°E):'), 
+            style: 'width: 120px;',
+            y_align: Clutter.ActorAlign.CENTER
+        });
         let lonInput = new St.Entry({
             text: this.settings.longitude.toString(),
-            style: 'width: 150px;'
+            style: 'width: 150px;',
+            y_align: Clutter.ActorAlign.CENTER
         });
         lonBox.add_child(lonLabel);
         lonBox.add_child(lonInput);
@@ -195,7 +208,7 @@ const HdateButton = new GObject.registerClass({
         dialog.add_child(coordContainer);
 
 
-        // Time zone entry (free-form)
+        // Time zone entry (text input with dropdown options below)
         function formatTz(val) {
             let sign = val >= 0 ? '+' : '';
             return `UTC${sign}${val}`;
@@ -292,37 +305,42 @@ const HdateButton = new GObject.registerClass({
         dialog.add_child(tzEntryBox);
         dialog.add_child(tzList);
 
-        // Button container (centered)
+        // Button container
         let buttonBox = new St.BoxLayout({
             vertical: false,
-            style: 'spacing: 10px; margin: 10px; justify-content: center;'
+            style: 'margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;',
+            x_expand: true
         });
 
         let okButton = new St.Button({
             label: _('OK'),
-            style_class: 'button'
+            style_class: 'button',
+            x_expand: false,
+            style: 'margin-left: 10px;'
         });
 
         let cancelButton = new St.Button({
             label: _('Cancel'),
-            style_class: 'button'
+            style_class: 'button',
+            x_expand: false,
+            style: 'margin-right: 10px;'
         });
 
         buttonBox.add_child(okButton);
+        
+        // Add spacer between buttons
+        let spacer = new St.Widget({
+            x_expand: true
+        });
+        buttonBox.add_child(spacer);
+        
         buttonBox.add_child(cancelButton);
         dialog.add_child(buttonBox);
 
-        // Create modal
+        // Create modal background
         let background = new St.Widget({
             reactive: true
         });
-        
-        // Push modal to capture input
-        let modalParams = {
-            actionMode: Shell.ActionMode.ALL,
-            shouldTakeFocus: true
-        };
-        Main.pushModal(background, modalParams);
         
 
         let dialogContainer = new St.BoxLayout({
@@ -335,14 +353,13 @@ const HdateButton = new GObject.registerClass({
         let monitor = Main.layoutManager.primaryMonitor;
         dialogContainer.set_position(
             Math.floor((monitor.width - 360) / 2), // Center horizontally
-            35 // Small offset from top
+            40 // Small offset from top
         );
         dialogContainer.add_child(dialog);
 
         background.add_child(dialogContainer);
 
         let closeDialog = () => {
-            Main.popModal(background);
             Main.uiGroup.remove_child(background);
             background.destroy();
         };
