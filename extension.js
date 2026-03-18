@@ -213,16 +213,20 @@ const HdateButton = new GObject.registerClass({
 
         let tzEntry = new St.Entry({
             text: formatTz(this.settings.tz),
-            style: 'width: 320px; margin: 10px;'
+            style: 'width: 70px; margin: 10px;',
+            y_align: Clutter.ActorAlign.CENTER
         });
-        let tzEntryLabel = new St.Label({ text: _('Timezone (UTC offset):') });
+        let tzEntryLabel = new St.Label({ 
+            text: _('Timezone (UTC offset):'),
+            y_align: Clutter.ActorAlign.CENTER
+        });
         let tzEntryBox = new St.BoxLayout({
             vertical: false,
             style: 'spacing: 10px; margin: 10px;'
         });
         tzEntryBox.add_child(tzEntryLabel);
         tzEntryBox.add_child(tzEntry);
-        dialog.add_child(tzEntryBox);
+        // dialog.add_child(tzEntryBox);
 
         // Time zone dropdown (common locations)
         let tzOptions = [
@@ -240,15 +244,6 @@ const HdateButton = new GObject.registerClass({
 
         let selectedTz = this.settings.tz;
 
-        function tzLabel(val) {
-            let sign = val >= 0 ? '+' : '';
-            return _('Time zone:') + ` UTC${sign}${val}`;
-        }
-
-        let tzButton = new St.Button({
-            label: tzLabel(selectedTz),
-            style: 'width: 320px; margin: 10px; text-align: left;'
-        });
 
         let tzListBox = new St.BoxLayout({
             vertical: true,
@@ -279,7 +274,6 @@ const HdateButton = new GObject.registerClass({
             item.connect('clicked', () => {
                 selectedTz = option.value;
                 updateHighlight();
-                tzButton.set_label(tzLabel(selectedTz));
                 tzEntry.text = formatTz(selectedTz);
             });
             tzListBox.add_child(item);
@@ -295,7 +289,7 @@ const HdateButton = new GObject.registerClass({
         });
         tzList.add_child(tzListBox);
 
-        dialog.add_child(tzButton);
+        dialog.add_child(tzEntryBox);
         dialog.add_child(tzList);
 
         // Button container (centered)
@@ -323,6 +317,13 @@ const HdateButton = new GObject.registerClass({
             reactive: true
         });
         
+        // Push modal to capture input
+        let modalParams = {
+            actionMode: Shell.ActionMode.ALL,
+            shouldTakeFocus: true
+        };
+        Main.pushModal(background, modalParams);
+        
 
         let dialogContainer = new St.BoxLayout({
             vertical: true,
@@ -340,6 +341,12 @@ const HdateButton = new GObject.registerClass({
 
         background.add_child(dialogContainer);
 
+        let closeDialog = () => {
+            Main.popModal(background);
+            Main.uiGroup.remove_child(background);
+            background.destroy();
+        };
+
         okButton.connect('clicked', () => {
             let lon = parseFloat(lonInput.text);
             let lat = parseFloat(latInput.text);
@@ -355,14 +362,12 @@ const HdateButton = new GObject.registerClass({
                 this._applySettings();
                 this._refresh_button_menu(); // Force menu refresh with new location
 
-                Main.uiGroup.remove_child(background);
-                background.destroy();
+                closeDialog();
             }
         });
 
         cancelButton.connect('clicked', () => {
-            Main.uiGroup.remove_child(background);
-            background.destroy();
+            closeDialog();
         });
 
         Main.uiGroup.add_child(background);
