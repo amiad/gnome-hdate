@@ -296,7 +296,8 @@ const HdateButton = new GObject.registerClass({
         updateHighlight();
 
         let tzList = new St.ScrollView({
-            style: 'background: rgba(255,255,255,0.95); border: 1px solid rgba(0,0,0,0.2); max-height: 180px; width: 340px; margin-left: 10px; margin-right: 10px;',
+            style_class: 'popup-menu-content',
+            style: 'background-color: rgba(0,0,0,0.05); max-height: 180px; width: 340px; margin-left: 10px; margin-right: 10px; border: 1px solid rgba(0,0,0,0.15);',
             x_expand: true,
             y_expand: false
         });
@@ -346,7 +347,8 @@ const HdateButton = new GObject.registerClass({
         let dialogContainer = new St.BoxLayout({
             vertical: true,
             reactive: true,
-            style: 'background-color: #f0f0f0; border-radius: 10px; padding: 20px; width: 360px;'
+            style_class: 'popup-menu-content',
+            style: 'border-radius: 10px; padding: 20px; width: 360px;'
         });
         
         // Center horizontally and position near top
