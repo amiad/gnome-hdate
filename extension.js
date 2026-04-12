@@ -155,7 +155,6 @@ const HdateButton = new GObject.registerClass({
         let titleLabel = new St.Label({
             text: _('Edit Location Settings'),
             style_class: 'hddate-settings-title',
-            style: 'font-size: 16px; font-weight: bold;',
             x_align: Clutter.ActorAlign.CENTER,
             x_expand: true
         });
@@ -164,22 +163,22 @@ const HdateButton = new GObject.registerClass({
         // Create table-like layout for coordinates using BoxLayout
         let coordContainer = new St.BoxLayout({
             vertical: true,
-            style: 'spacing: 10px; margin: 10px;'
+            style_class: 'hddate-coord-container'
         });
 
         // Latitude row
         let latBox = new St.BoxLayout({
             vertical: false,
-            style: 'spacing: 10px;'
+            style_class: 'hddate-coord-row'
         });
-        let latLabel = new St.Label({ 
-            text: _('Latitude (°N):'), 
-            style: 'width: 120px;',
+        let latLabel = new St.Label({
+            text: _('Latitude (°N):'),
+            style_class: 'hddate-coord-label',
             y_align: Clutter.ActorAlign.CENTER
         });
         let latInput = new St.Entry({
             text: this.settings.latitude.toString(),
-            style: 'width: 150px;',
+            style_class: 'hddate-coord-input',
             y_align: Clutter.ActorAlign.CENTER
         });
         latBox.add_child(latLabel);
@@ -189,16 +188,16 @@ const HdateButton = new GObject.registerClass({
         // Longitude row
         let lonBox = new St.BoxLayout({
             vertical: false,
-            style: 'spacing: 10px;'
+            style_class: 'hddate-coord-row'
         });
-        let lonLabel = new St.Label({ 
-            text: _('Longitude (°E):'), 
-            style: 'width: 120px;',
+        let lonLabel = new St.Label({
+            text: _('Longitude (°E):'),
+            style_class: 'hddate-coord-label',
             y_align: Clutter.ActorAlign.CENTER
         });
         let lonInput = new St.Entry({
             text: this.settings.longitude.toString(),
-            style: 'width: 150px;',
+            style_class: 'hddate-coord-input',
             y_align: Clutter.ActorAlign.CENTER
         });
         lonBox.add_child(lonLabel);
@@ -226,16 +225,16 @@ const HdateButton = new GObject.registerClass({
 
         let tzEntry = new St.Entry({
             text: formatTz(this.settings.tz),
-            style: 'width: 70px; margin: 10px;',
+            style_class: 'hddate-tz-entry',
             y_align: Clutter.ActorAlign.CENTER
         });
-        let tzEntryLabel = new St.Label({ 
+        let tzEntryLabel = new St.Label({
             text: _('Timezone (UTC offset):'),
             y_align: Clutter.ActorAlign.CENTER
         });
         let tzEntryBox = new St.BoxLayout({
             vertical: false,
-            style: 'spacing: 10px; margin: 10px;'
+            style_class: 'hddate-tz-entry-box'
         });
         tzEntryBox.add_child(tzEntryLabel);
         tzEntryBox.add_child(tzEntry);
@@ -260,7 +259,7 @@ const HdateButton = new GObject.registerClass({
 
         let tzListBox = new St.BoxLayout({
             vertical: true,
-            style: 'spacing: 4px; padding: 5px;'
+            style_class: 'hddate-tz-list-box'
         });
 
         let items = []; // Store items with their values for highlighting
@@ -269,9 +268,9 @@ const HdateButton = new GObject.registerClass({
             // Highlight item matching current selectedTz
             for (let itemData of items) {
                 if (itemData.value === selectedTz) {
-                    itemData.item.set_style('justify-content: flex-start; text-align: left; background-color: rgba(0, 100, 200, 0.3); border-radius: 5px; padding: 5px;');
+                    itemData.item.add_style_class_name('hddate-tz-item-selected');
                 } else {
-                    itemData.item.set_style('justify-content: flex-start; text-align: left;');
+                    itemData.item.remove_style_class_name('hddate-tz-item-selected');
                 }
             }
         }
@@ -279,7 +278,7 @@ const HdateButton = new GObject.registerClass({
         for (let option of tzOptions) {
             let item = new St.Button({
                 label: option.label,
-                style: 'justify-content: flex-start; text-align: left;'
+                style_class: 'hddate-tz-item'
             });
             
             items.push({ item: item, value: option.value });
@@ -296,8 +295,7 @@ const HdateButton = new GObject.registerClass({
         updateHighlight();
 
         let tzList = new St.ScrollView({
-            style_class: 'popup-menu-content',
-            style: 'background-color: rgba(0,0,0,0.05); max-height: 180px; width: 340px; margin-left: 10px; margin-right: 10px; border: 1px solid rgba(0,0,0,0.15);',
+            style_class: 'popup-menu-content hddate-tz-list',
             x_expand: true,
             y_expand: false
         });
@@ -309,22 +307,20 @@ const HdateButton = new GObject.registerClass({
         // Button container
         let buttonBox = new St.BoxLayout({
             vertical: false,
-            style: 'margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;',
+            style_class: 'hddate-button-box',
             x_expand: true
         });
 
         let okButton = new St.Button({
             label: _('OK'),
-            style_class: 'button',
-            x_expand: false,
-            style: 'margin-left: 10px;'
+            style_class: 'button hddate-ok-button',
+            x_expand: false
         });
 
         let cancelButton = new St.Button({
             label: _('Cancel'),
-            style_class: 'button',
-            x_expand: false,
-            style: 'margin-right: 10px;'
+            style_class: 'button hddate-cancel-button',
+            x_expand: false
         });
 
         buttonBox.add_child(okButton);
@@ -347,8 +343,7 @@ const HdateButton = new GObject.registerClass({
         let dialogContainer = new St.BoxLayout({
             vertical: true,
             reactive: true,
-            style_class: 'popup-menu-content',
-            style: 'border-radius: 10px; padding: 20px; width: 360px;'
+            style_class: 'popup-menu-content hddate-dialog-container'
         });
         
         // Center horizontally and position near top
