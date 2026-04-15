@@ -1,7 +1,7 @@
 # gnome-hdate
 Gnome-shell extension for show Hebrew date in the panel.
 
-![Hebrew date in gnome-shell](https://raw.githubusercontent.com/amiad/gnome-hdate/master/screenshot.png)
+![Hebrew date in gnome-shell](https://github.com/amiad/gnome-hdate/blob/master/screenshot.png?raw=true)
 
 ## Dependencies
 * **vala**
