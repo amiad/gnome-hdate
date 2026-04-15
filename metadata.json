@@ -3,16 +3,14 @@
   "description": "Show Hebrew Date in the Panel.\nRequires libhdate-glib",
   "gettext-domain": "gnome-hdate",
   "name": "Gnome HDate",
-  "settings-schema": "org.gnome.shell.extensions.hdate",
   "shell-version": [
     "45",
     "46",
     "47",
     "48",
-    "49",
-    "50"
+    "49"
   ],
   "url": "https://github.com/amiad/gnome-hdate",
   "uuid": "hdate@hatul.info",
-  "version": 29
+  "version": 32
 }

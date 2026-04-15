@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.hdate" path="/org/gnome/shell/extensions/hdate/">
+    <key name="latitude" type="d">
+      <default>32.07</default>
+      <summary>Latitude</summary>
+    </key>
+    <key name="longitude" type="d">
+      <default>34.77</default>
+      <summary>Longitude</summary>
+    </key>
+  </schema>
+</schemalist>

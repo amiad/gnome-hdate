@@ -8,35 +8,49 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-13 18:50+0200\n"
+"POT-Creation-Date: 2026-04-15 12:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: extension.js:151
+#: ../extension.js:61
+msgid " day of Omer"
+msgstr ""
+
+#: ../extension.js:71
 msgid "Sunrise: "
 msgstr ""
 
-#: extension.js:153
+#: ../extension.js:73
 msgid "Sunset: "
 msgstr ""
 
-#: extension.js:156
-msgid "First light: "
-msgstr ""
-
-#: extension.js:158
-msgid "First stars: "
-msgstr ""
-
-#: extension.js:160
-msgid "Three stars: "
-msgstr ""
-
-#: extension.js:163
+#: ../extension.js:87
 msgid "Week's Torah: "
+msgstr ""
+
+#: ../extension.js:91
+msgid "Settings ⚙"
+msgstr ""
+
+#: ../prefs.js:13
+msgid "Location Settings"
+msgstr ""
+
+#: ../prefs.js:14
+msgid ""
+"Latitude and longitude are used to calculate times of day (sunrise and "
+"sunset)"
+msgstr ""
+
+#: ../prefs.js:18
+msgid "Latitude"
+msgstr ""
+
+#: ../prefs.js:31
+msgid "Longitude"
 msgstr ""

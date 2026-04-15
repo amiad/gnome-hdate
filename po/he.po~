@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-15 12:18+0300\n"
+"POT-Creation-Date: 2026-04-15 12:05+0300\n"
 "PO-Revision-Date: 2026-04-15 12:13+0300\n"
 "Last-Translator: Amiad Bareli <amiad at hatul.info>\n"
 "Language-Team: Hebrew\n"
@@ -18,43 +18,52 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 : 3);\n"
 "X-Generator: Poedit 3.8\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: /home/amiad/projects/gnome-hdate\n"
 
-#: ../extension.js:61
+#: extension.js:61
 msgid " day of Omer"
 msgstr " לעומר"
 
-#: ../extension.js:71
+#: extension.js:71
 msgid "Sunrise: "
 msgstr "זריחה: "
 
-#: ../extension.js:73
+#: extension.js:73
 msgid "Sunset: "
 msgstr "שקיעה: "
 
-#: ../extension.js:87
+#: extension.js:87
 msgid "Week's Torah: "
 msgstr "פרשת השבוע: "
 
-#: ../extension.js:91
+#: extension.js:91
 msgid "Settings ⚙"
 msgstr "⚙ הגדרות"
 
-msgid "Location Settings"
-msgstr "הגדרות מיקום"
+#~ msgid "First light: "
+#~ msgstr "עלות השחר: "
 
-msgid "Latitude and longitude are used to calculate times of day (sunrise and sunset)"
-msgstr "קווי האורך והרוחב משמשים לחישוב זמני היום (זריחה ושקיעה)"
+#~ msgid "First stars: "
+#~ msgstr "צאת הכוכבים: "
 
-msgid "Latitude"
-msgstr "קו רוחב"
+#~ msgid "Three stars: "
+#~ msgstr "שלושה כוכבים: "
 
-msgid "Longitude"
-msgstr "קו אורך"
+#~ msgid "Sunrise - "
+#~ msgstr "זריחה – "
 
+#~ msgid "Sunset - "
+#~ msgstr "שקיעה – "
 
+#~ msgid "First light - "
+#~ msgstr "עלות השחר – "
+
+#~ msgid "First stars - "
+#~ msgstr "צאת הכוכבים – "
+
+#~ msgid "Three stars - "
+#~ msgstr "שלושה כוכבים – "
