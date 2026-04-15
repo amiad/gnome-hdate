@@ -1,0 +1,88 @@
+/* Settings dialog title */
+.hddate-settings-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Coordinate input container */
+.hddate-coord-container {
+    spacing: 10px;
+    margin: 10px;
+}
+
+/* Coordinate row (label + input side by side) */
+.hddate-coord-row {
+    spacing: 10px;
+}
+
+/* Coordinate labels */
+.hddate-coord-label {
+    width: 120px;
+}
+
+/* Coordinate text inputs */
+.hddate-coord-input {
+    width: 150px;
+}
+
+/* Timezone entry field */
+.hddate-tz-entry {
+    width: 70px;
+    margin: 10px;
+}
+
+/* Timezone entry row */
+.hddate-tz-entry-box {
+    spacing: 10px;
+    margin: 10px;
+}
+
+/* Inner timezone list box */
+.hddate-tz-list-box {
+    spacing: 4px;
+    padding: 5px;
+}
+
+/* Timezone scroll view */
+.hddate-tz-list {
+    background-color: rgba(0, 0, 0, 0.05);
+    max-height: 180px;
+    width: 340px;
+    margin-inline-start: 10px;
+    margin-inline-end: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* Individual timezone button — use logical alignment for RTL support */
+.hddate-tz-item {
+    text-align: start;
+}
+
+/* Selected timezone button */
+.hddate-tz-item-selected {
+    background-color: rgba(0, 100, 200, 0.3);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* OK / Cancel button row */
+.hddate-button-box {
+    margin: 10px;
+}
+
+/* Extra start-side margin on OK button */
+.hddate-ok-button {
+    margin-inline-start: 10px;
+}
+
+/* Extra end-side margin on Cancel button */
+.hddate-cancel-button {
+    margin-inline-end: 10px;
+}
+
+/* Outer dialog container */
+.hddate-dialog-container {
+    border-radius: 10px;
+    padding: 20px;
+    width: 360px;
+}
