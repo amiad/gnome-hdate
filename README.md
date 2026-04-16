@@ -23,11 +23,6 @@ glib-compile-schemas ~/.local/share/gnome-shell/extensions/hdate@hatul.info/sche
 ### Archlinux Users
 Install [gnome-shell-extension-gnome-hdate-git](https://aur.archlinux.org/packages/gnome-shell-extension-gnome-hdate-git/) from AUR.
 
-Run:
-```bash
-glib-compile-schemas ~/.local/share/gnome-shell/extensions/hdate@hatul.info/schemas/
-```
-
 ## Troubleshooting
 * **Settings:** If the preferences window does not open, ensure you have compiled the schemas as shown in the installation section.
 
