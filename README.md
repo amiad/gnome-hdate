@@ -1,15 +1,10 @@
 # gnome-hdate
-Gnome-shell extension for show Hebrew date in the panel.
+Gnome-shell extension for showing the Hebrew date in the panel.
 
 ![Hebrew date in gnome-shell](https://github.com/amiad/gnome-hdate/blob/master/screenshot.png?raw=true)
 
-## Dependencies
-* **vala**
-* **[libhdate](http://libhdate.sourceforge.net/)>=1.6** - Existing in repositories of most distributions.
-* **[libhdate-glib](http://libhdate-glib.googlecode.com/)>=0.5** * Arch: [AUR](https://aur.archlinux.org/packages/libhdate-glib/)
-    * Debian/Ubuntu: [64 bit](http://code.google.com/p/libhdate-glib/downloads/detail?name=libhdate-glib_0.5.0-1_amd64.deb&can=2&q=)
-
-[How install the dependencies on Ubuntu from whatsup forum](https://whatsup.org.il/index.php?name=PNphpBB2&file=viewtopic&p=430129#430129) (thanks to Nachum).
+## Note on Compatibility
+**Standalone Extension:** This version is now completely self-contained and does not require external libraries such as `libhdate`, `libhdate-glib`, or `vala`. If you have these installed solely for this extension, you can safely remove them.
 
 ## Installation
 
@@ -17,9 +12,10 @@ Gnome-shell extension for show Hebrew date in the panel.
 Install from [GNOME Shell extensions site](https://extensions.gnome.org/extension/554/gnome-hdate/).
 
 ### Manual Installation
-Download [master.zip](https://github.com/amiad/gnome-hdate/archive/master.zip), unzip it, rename the directory to `hdate@hatul.info` and move it to `~/.local/share/gnome-shell/extensions`.
-
-**Note:** For the settings window to function, you must compile the schemas:
+1. Download the source code.
+2. Rename the directory to `hdate@hatul.info`.
+3. Move it to `~/.local/share/gnome-shell/extensions`.
+4. **Compile schemas:**
 ```bash
 glib-compile-schemas ~/.local/share/gnome-shell/extensions/hdate@hatul.info/schemas/
 ```
@@ -34,9 +30,7 @@ glib-compile-schemas ~/.local/share/gnome-shell/extensions/hdate@hatul.info/sche
 
 ## Troubleshooting
 * **Settings:** If the preferences window does not open, ensure you have compiled the schemas as shown in the installation section.
-* **Libraries:** Arch users may need to rebuild `libhdate-glib` every new version of GNOME.
 
 ## Thanks
-* **Kobi Zamir** for libhdate.
-* **Nachum** for the Ubuntu dependency guide.
+* **Kobi Zamir** Huge thanks for the original libhdate and [libhdate-js](https://github.com/yaacov/libhdate-js). This extension's core logic is based on a modified and optimized version of his work.
 * **ElanGoldman** for fixes and comments.
