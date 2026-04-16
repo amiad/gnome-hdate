@@ -39,8 +39,14 @@ const HdateButton = new GObject.registerClass({
 
         this._settingsChangedId = this._settings.connect('changed', () => this._applySettings());
         this._applySettings();
-        this._timeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 60, this._refresh.bind(this));
-        this._refresh();
+        
+        // Fast polling to detect manual system clock changes
+        this._timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
+            this._refresh();
+            return GLib.SOURCE_CONTINUE;
+        });
+
+        this._refresh(true);
     }
 
     _applySettings() {
@@ -94,18 +100,29 @@ const HdateButton = new GObject.registerClass({
     }
 
     _refresh(force = false) {
+        let oldGDay = this.h.get_gday();
         this.h.set_today();
-        if (force || this.h.get_julian() !== this.jd) {
+        
+        let newGDay = this.h.get_gday();
+        let currentJd = this.h.get_julian();
+
+        // Refresh if forced, if date changed, or if manual system time change detected
+        if (force || currentJd !== this.jd || newGDay !== oldGDay) {
             this._refresh_button_label();
             this._refresh_button_menu();
-            this.jd = this.h.get_julian();
+            this.jd = currentJd;
         }
         return true;
     }
 
     destroy() {
-        if (this._timeout) GLib.source_remove(this._timeout);
-        if (this._settingsChangedId) this._settings.disconnect(this._settingsChangedId);
+        if (this._timeoutId) {
+            GLib.source_remove(this._timeoutId);
+            this._timeoutId = null;
+        }
+        if (this._settingsChangedId) {
+            this._settings.disconnect(this._settingsChangedId);
+        }
         super.destroy();
     }
 });
