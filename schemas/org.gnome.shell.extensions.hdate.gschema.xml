@@ -9,5 +9,10 @@
       <default>34.77</default>
       <summary>Longitude</summary>
     </key>
+    <key type="b" name="is-diaspora">
+      <default>false</default>
+      <summary>Diaspora mode</summary>
+      <description>Use Diaspora settings for holidays and Torah portions (outside of Israel).</description>
+    </key>
   </schema>
 </schemalist>

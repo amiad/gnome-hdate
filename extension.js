@@ -39,8 +39,7 @@ const HdateButton = new GObject.registerClass({
 
         this._settingsChangedId = this._settings.connect('changed', () => this._applySettings());
         this._applySettings();
-        
-        // Fast polling to detect manual system clock changes
+
         this._timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
             this._refresh();
             return GLib.SOURCE_CONTINUE;
@@ -52,20 +51,21 @@ const HdateButton = new GObject.registerClass({
     _applySettings() {
         this.latitude = this._settings.get_double('latitude');
         this.longitude = this._settings.get_double('longitude');
+        this.isDiaspora = this._settings.get_boolean('is-diaspora');
         this._refresh(true);
     }
 
     _refresh_button_label() {
         let label = this.h.getFullHebrewDate();
 
-        let holyday = this.h.get_holyday();
+        let holyday = this.h.get_holyday(this.isDiaspora);
         if (holyday !== 0) {
             label += `, ${this.h.get_holyday_string(holyday)}`;
         }
 
         let omer = this.h.get_omer_day();
         if (omer !== 0) {
-            label += `, ${this.h.get_int_string(omer)}${_(" day of Omer")}`;
+            label += `, ${this.h.numToHebrew(omer)} בעומר`;
         }
         this.buttonText.set_text(label);
     }
@@ -82,16 +82,28 @@ const HdateButton = new GObject.registerClass({
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
         let tempH = new LibHdate();
-        tempH.set_gdate(this.h.get_gday(), this.h.get_gmonth(), this.h.get_gyear());
-        let tries = 0;
-        while (tempH.get_parasha() === 0 && tries < 7) {
-            let next = GLib.DateTime.new_local(tempH.get_gyear(), tempH.get_gmonth(), tempH.get_gday(), 12, 0, 0).add_days(1);
-            tempH.set_gdate(next.get_day_of_month(), next.get_month(), next.get_year());
-            tries++;
+        tempH.set_jd(this.h.hd_jd);
+
+        let daysToShabbat = (7 - tempH.hd_dw + 7) % 7;
+        if (daysToShabbat > 0) {
+            tempH.set_jd(tempH.hd_jd + daysToShabbat);
         }
 
-        this.menu.addMenuItem(new PopupMenu.PopupMenuItem(
-            _("Week's Torah: ") + tempH.get_parasha_string(tempH.get_parasha())));
+        let readingLabel = "";
+        let parashaIdx = tempH.get_parasha(this.isDiaspora);
+
+        if (parashaIdx !== 0) {
+            readingLabel = tempH.get_parasha_string(parashaIdx);
+        } else {
+            let holydayIdx = tempH.get_holyday(this.isDiaspora);
+            if (holydayIdx !== 0) {
+                readingLabel = tempH.get_holyday_string(holydayIdx);
+            }
+        }
+
+        if (readingLabel) {
+            this.menu.addMenuItem(new PopupMenu.PopupMenuItem( _("Week's Torah: ") + readingLabel));
+        }
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         let settingsItem = new PopupMenu.PopupMenuItem(_('Settings ⚙'));
@@ -102,11 +114,10 @@ const HdateButton = new GObject.registerClass({
     _refresh(force = false) {
         let oldGDay = this.h.get_gday();
         this.h.set_today();
-        
+
         let newGDay = this.h.get_gday();
         let currentJd = this.h.get_julian();
 
-        // Refresh if forced, if date changed, or if manual system time change detected
         if (force || currentJd !== this.jd || newGDay !== oldGDay) {
             this._refresh_button_label();
             this._refresh_button_menu();
@@ -129,7 +140,6 @@ const HdateButton = new GObject.registerClass({
 
 export default class HDate extends Extension {
     enable() {
-        this.initTranslations();
         this._hdateButton = new HdateButton(this);
         Main.panel.addToStatusArea('hdate-button', this._hdateButton, 0, "center");
     }

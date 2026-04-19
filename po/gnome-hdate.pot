@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-15 12:18+0300\n"
+"POT-Creation-Date: 2026-04-19 12:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,19 +38,31 @@ msgid "Settings ⚙"
 msgstr ""
 
 #: ../prefs.js:13
+msgid "General Settings"
+msgstr ""
+
+#: ../prefs.js:17
+msgid "Diaspora Mode"
+msgstr ""
+
+#: ../prefs.js:18
+msgid "Use Diaspora tradition for holidays and Torah portions"
+msgstr ""
+
+#: ../prefs.js:31
 msgid "Location Settings"
 msgstr ""
 
-#: ../prefs.js:14
+#: ../prefs.js:32
 msgid ""
 "Latitude and longitude are used to calculate times of day (sunrise and "
 "sunset)"
 msgstr ""
 
-#: ../prefs.js:18
+#: ../prefs.js:36
 msgid "Latitude"
 msgstr ""
 
-#: ../prefs.js:31
+#: ../prefs.js:49
 msgid "Longitude"
 msgstr ""

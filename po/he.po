@@ -1,17 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Amiad Bareli <amiad at hatul.info>, 2012.
-# Amiad Bareli <amiad at hatul.info>, 2012.
-# Amiad Bareli <amiad at hatul.info>, 2015.
-# Amiad Bareli <amiad at hatul.info>, 2015.
-# Amiad Bareli <amiad at hatul.info>, 2015.
+# Amiad Bareli <amiad at hatul.info>, 2012-2026.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-15 12:18+0300\n"
-"PO-Revision-Date: 2026-04-15 12:13+0300\n"
+"POT-Creation-Date: 2026-04-19 12:30+0300\n"
+"PO-Revision-Date: 2026-04-19 12:35+0300\n"
 "Last-Translator: Amiad Bareli <amiad at hatul.info>\n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -23,7 +20,6 @@ msgstr ""
 "X-Generator: Poedit 3.8\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: /home/amiad/projects/gnome-hdate\n"
 
 #: ../extension.js:61
 msgid " day of Omer"
@@ -45,16 +41,32 @@ msgstr "פרשת השבוע: "
 msgid "Settings ⚙"
 msgstr "⚙ הגדרות"
 
+#: ../prefs.js:13
+msgid "General Settings"
+msgstr "הגדרות כלליות"
+
+#: ../prefs.js:17
+msgid "Diaspora Mode"
+msgstr "מצב חו״ל"
+
+#: ../prefs.js:18
+msgid "Use Diaspora tradition for holidays and Torah portions"
+msgstr "הצגת חגים ופרשות השבוע לפי מנהג חו״ל (יום טוב שני)"
+
+#: ../prefs.js:31
 msgid "Location Settings"
 msgstr "הגדרות מיקום"
 
-msgid "Latitude and longitude are used to calculate times of day (sunrise and sunset)"
+#: ../prefs.js:32
+msgid ""
+"Latitude and longitude are used to calculate times of day (sunrise and "
+"sunset)"
 msgstr "קווי האורך והרוחב משמשים לחישוב זמני היום (זריחה ושקיעה)"
 
+#: ../prefs.js:36
 msgid "Latitude"
 msgstr "קו רוחב"
 
+#: ../prefs.js:49
 msgid "Longitude"
 msgstr "קו אורך"
-
-

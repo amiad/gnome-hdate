@@ -9,11 +9,31 @@ export default class HDatePreferences extends ExtensionPreferences {
         const settings = this.getSettings('org.gnome.shell.extensions.hdate');
         
         const page = new Adw.PreferencesPage();
-        const group = new Adw.PreferencesGroup({
+
+        // General Settings Group
+        const generalGroup = new Adw.PreferencesGroup({
+            title: _('General Settings'),
+        });
+        page.add(generalGroup);
+
+        const diasporaRow = new Adw.ActionRow({ 
+            title: _('Diaspora Mode'),
+            subtitle: _('Use Diaspora tradition for holidays and Torah portions')
+        });
+        const diasporaSwitch = new Gtk.Switch({
+            active: settings.get_boolean('is-diaspora'),
+            valign: Gtk.Align.CENTER,
+        });
+        settings.bind('is-diaspora', diasporaSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
+        diasporaRow.add_suffix(diasporaSwitch);
+        generalGroup.add(diasporaRow);
+
+        // Location Settings Group
+        const locationGroup = new Adw.PreferencesGroup({
             title: _('Location Settings'),
             description: _('Latitude and longitude are used to calculate times of day (sunrise and sunset)')
         });
-        page.add(group);
+        page.add(locationGroup);
 
         const latRow = new Adw.ActionRow({ title: _('Latitude') });
         const latSpin = new Gtk.SpinButton({
@@ -26,7 +46,7 @@ export default class HDatePreferences extends ExtensionPreferences {
         });
         settings.bind('latitude', latSpin, 'value', Gio.SettingsBindFlags.DEFAULT);
         latRow.add_suffix(latSpin);
-        group.add(latRow);
+        locationGroup.add(latRow);
 
         const lonRow = new Adw.ActionRow({ title: _('Longitude') });
         const lonSpin = new Gtk.SpinButton({
@@ -39,7 +59,7 @@ export default class HDatePreferences extends ExtensionPreferences {
         });
         settings.bind('longitude', lonSpin, 'value', Gio.SettingsBindFlags.DEFAULT);
         lonRow.add_suffix(lonSpin);
-        group.add(lonRow);
+        locationGroup.add(lonRow);
 
         window.add(page);
     }
