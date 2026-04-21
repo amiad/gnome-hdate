@@ -14,5 +14,9 @@
       <summary>Diaspora mode</summary>
       <description>Use Diaspora settings for holidays and Torah portions (outside of Israel).</description>
     </key>
+    <key name="change-at-sunset" type="b">
+      <default>false</default>
+      <summary>Change date at sunset</summary>
+    </key>
   </schema>
 </schemalist>

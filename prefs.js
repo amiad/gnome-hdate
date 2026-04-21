@@ -16,6 +16,7 @@ export default class HDatePreferences extends ExtensionPreferences {
         });
         page.add(generalGroup);
 
+        // Diaspora Mode
         const diasporaRow = new Adw.ActionRow({ 
             title: _('Diaspora Mode'),
             subtitle: _('Use Diaspora tradition for holidays and Torah portions')
@@ -27,6 +28,18 @@ export default class HDatePreferences extends ExtensionPreferences {
         settings.bind('is-diaspora', diasporaSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
         diasporaRow.add_suffix(diasporaSwitch);
         generalGroup.add(diasporaRow);
+
+        // Change at Sunset
+        const sunsetRow = new Adw.ActionRow({ 
+            title: _('Change date at sunset'),
+        });
+        const sunsetSwitch = new Gtk.Switch({
+            active: settings.get_boolean('change-at-sunset'),
+            valign: Gtk.Align.CENTER,
+        });
+        settings.bind('change-at-sunset', sunsetSwitch, 'active', Gio.SettingsBindFlags.DEFAULT);
+        sunsetRow.add_suffix(sunsetSwitch);
+        generalGroup.add(sunsetRow);
 
         // Location Settings Group
         const locationGroup = new Adw.PreferencesGroup({

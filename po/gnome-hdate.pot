@@ -49,6 +49,10 @@ msgstr ""
 msgid "Use Diaspora tradition for holidays and Torah portions"
 msgstr ""
 
+#: ../prefs.js:25
+msgid "Change date at sunset"
+msgstr ""
+
 #: ../prefs.js:31
 msgid "Location Settings"
 msgstr ""

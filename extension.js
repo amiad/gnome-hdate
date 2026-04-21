@@ -36,6 +36,8 @@ const HdateButton = new GObject.registerClass({
 
         this.h = new LibHdate();
         this.jd = 0;
+        this._sunsetMin = 0;
+        this._isAfterSunset = false;
 
         this._settingsChangedId = this._settings.connect('changed', () => this._applySettings());
         this._applySettings();
@@ -56,7 +58,13 @@ const HdateButton = new GObject.registerClass({
     }
 
     _refresh_button_label() {
-        let label = this.h.getFullHebrewDate();
+        let label = "";
+
+        if (this._settings.get_boolean('change-at-sunset') && this._isAfterSunset) {
+            label = "אור ל";
+        }
+
+        label += this.h.getFullHebrewDate();
 
         let holyday = this.h.get_holyday(this.isDiaspora);
         if (holyday !== 0) {
@@ -72,12 +80,11 @@ const HdateButton = new GObject.registerClass({
 
     _refresh_button_menu() {
         this.menu.removeAll();
-        let tzMin = getSystemTzOffset() * 60;
 
         this.menu.addMenuItem(new PopupMenu.PopupMenuItem(
-            _("Sunrise: ") + minToString(this.h.get_sunrise(this.latitude, this.longitude) + tzMin)));
+            _("Sunrise: ") + minToString(this.h.get_sunrise(this.latitude, this.longitude) + (getSystemTzOffset() * 60))));
         this.menu.addMenuItem(new PopupMenu.PopupMenuItem(
-            _("Sunset: ") + minToString(this.h.get_sunset(this.latitude, this.longitude) + tzMin)));
+            _("Sunset: ") + minToString(this._sunsetMin)));
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
@@ -112,13 +119,22 @@ const HdateButton = new GObject.registerClass({
     }
 
     _refresh(force = false) {
-        let oldGDay = this.h.get_gday();
         this.h.set_today();
-
-        let newGDay = this.h.get_gday();
         let currentJd = this.h.get_julian();
 
-        if (force || currentJd !== this.jd || newGDay !== oldGDay) {
+        let tzMin = getSystemTzOffset() * 60;
+        this._sunsetMin = this.h.get_sunset(this.latitude, this.longitude) + tzMin;
+
+        let now = new Date();
+        let currentMin = (now.getHours() * 60) + now.getMinutes();
+        this._isAfterSunset = (currentMin >= this._sunsetMin && this._sunsetMin > 0);
+
+        if (this._settings.get_boolean('change-at-sunset') && this._isAfterSunset) {
+            currentJd += 1;
+            this.h.set_jd(currentJd);
+        }
+
+        if (force || currentJd !== this.jd) {
             this._refresh_button_label();
             this._refresh_button_menu();
             this.jd = currentJd;

@@ -53,6 +53,10 @@ msgstr "מצב חו״ל"
 msgid "Use Diaspora tradition for holidays and Torah portions"
 msgstr "הצגת חגים ופרשות השבוע לפי מנהג חו״ל (יום טוב שני)"
 
+#: ../prefs.js:25
+msgid "Change date at sunset"
+msgstr "החלפת התאריך העברי בשקיעה"
+
 #: ../prefs.js:31
 msgid "Location Settings"
 msgstr "הגדרות מיקום"
