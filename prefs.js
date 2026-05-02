@@ -5,7 +5,6 @@ import Gtk from 'gi://Gtk';
 
 export default class HDatePreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
-        this.initTranslations();
         const settings = this.getSettings('org.gnome.shell.extensions.hdate');
         
         const page = new Adw.PreferencesPage();
