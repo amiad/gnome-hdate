@@ -12,7 +12,7 @@ Gnome-shell extension for showing the Hebrew date in the panel.
 Install from [GNOME Shell extensions site](https://extensions.gnome.org/extension/554/gnome-hdate/).
 
 ### Manual Installation
-1. Download the source code.
+1. Download the [source code](https://github.com/amiad/gnome-hdate/archive/refs/heads/master.zip).
 2. Rename the directory to `hdate@hatul.info`.
 3. Move it to `~/.local/share/gnome-shell/extensions`.
 4. **Compile schemas:**
