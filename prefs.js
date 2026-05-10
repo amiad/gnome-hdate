@@ -6,16 +6,13 @@ import Gtk from 'gi://Gtk';
 export default class HDatePreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings('org.gnome.shell.extensions.hdate');
-        
         const page = new Adw.PreferencesPage();
 
-        // General Settings Group
         const generalGroup = new Adw.PreferencesGroup({
             title: _('General Settings'),
         });
         page.add(generalGroup);
 
-        // Diaspora Mode
         const diasporaRow = new Adw.ActionRow({ 
             title: _('Diaspora Mode'),
             subtitle: _('Use Diaspora tradition for holidays and Torah portions')
@@ -28,7 +25,6 @@ export default class HDatePreferences extends ExtensionPreferences {
         diasporaRow.add_suffix(diasporaSwitch);
         generalGroup.add(diasporaRow);
 
-        // Change at Sunset
         const sunsetRow = new Adw.ActionRow({ 
             title: _('Change date at sunset'),
         });
@@ -40,12 +36,13 @@ export default class HDatePreferences extends ExtensionPreferences {
         sunsetRow.add_suffix(sunsetSwitch);
         generalGroup.add(sunsetRow);
 
-        // Location Settings Group
         const locationGroup = new Adw.PreferencesGroup({
             title: _('Location Settings'),
             description: _('Latitude and longitude are used to calculate times of day (sunrise and sunset)')
         });
         page.add(locationGroup);
+
+        const spinSizeGroup = new Gtk.SizeGroup({ mode: Gtk.SizeGroupMode.HORIZONTAL });
 
         const latRow = new Adw.ActionRow({ title: _('Latitude') });
         const latSpin = new Gtk.SpinButton({
@@ -56,9 +53,11 @@ export default class HDatePreferences extends ExtensionPreferences {
             valign: Gtk.Align.CENTER,
             digits: 2
         });
+        latSpin.add_css_class('numeric');
         settings.bind('latitude', latSpin, 'value', Gio.SettingsBindFlags.DEFAULT);
         latRow.add_suffix(latSpin);
         locationGroup.add(latRow);
+        spinSizeGroup.add_widget(latSpin);
 
         const lonRow = new Adw.ActionRow({ title: _('Longitude') });
         const lonSpin = new Gtk.SpinButton({
@@ -69,9 +68,11 @@ export default class HDatePreferences extends ExtensionPreferences {
             valign: Gtk.Align.CENTER,
             digits: 2
         });
+        lonSpin.add_css_class('numeric');
         settings.bind('longitude', lonSpin, 'value', Gio.SettingsBindFlags.DEFAULT);
         lonRow.add_suffix(lonSpin);
         locationGroup.add(lonRow);
+        spinSizeGroup.add_widget(lonSpin);
 
         window.add(page);
     }
